@@ -1,0 +1,41 @@
+# ThisissoonFM Socket Server
+
+The ThisissoonFM socket server intefraces redis pub/sub events with clients via websockets.
+
+## Developing ##
+
+Ensure you have the following tools before you start developing this application:
+
+* [NodeJS](http://nodejs.org/)
+* [Git Flow](https://github.com/nvie/gitflow)
+
+### Docker
+
+The ThisissoonFM socket server is designed to be run under docker. This section will describe how to get the application up and running under docker.
+
+#### Building the Docker Image
+
+First step is to get docker installed on your system. You will need to use Boot2Docker on OSX/Windows and you can follow the basic instructions here but shout for help if you are not sure:
+
+https://docs.docker.com/installation/#installation
+
+Once you have docker running the first thing to do is build the docker image. In future we may host the latest image build on docker hub or similar.
+
+    $ docker build -t thisissoon/fm-socket .
+
+#### Running the Application
+
+    $ docker run --rm -it thisissoon/fm-socket
+
+#### Running in Development
+
+To run the application in development, we're using [fig](http://www.fig.sh/).
+
+##### Fig (OSX)
+Fig defines all the services that make up the app in fig.yml and runs them together in an isolated environment. Simply run:
+
+    $ fig up
+
+To attach your local code for development, un-comment the relevant application volumes in fig.yml.
+
+Check it out at [http://localdocker:8080](http://localdocker:8080)

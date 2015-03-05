@@ -1,0 +1,15 @@
+socket:
+  image: soon/fm-socket:develop
+  command: forever -w server.js
+  volumes:
+    - server.js:/fm-socket/server.js
+  ports:
+    - "8080:8080"
+  links:
+    - redis
+redis:
+  image: redis:latest
+  expose:
+    - "6379"
+  ports:
+    - "6379:6379"
