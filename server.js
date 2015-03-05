@@ -30,18 +30,16 @@ var serverHandler = function serverHandler (req, res) {
 }
 
 /**
- * Handle websocket connection
+ * Log socket connection and emit status event to connected socket
  * @param {Object} socket   socket.io socket
+ * @method sockerConnectHandler
  */
-var socketHandler = function socketHandler(socket) {
+var socketConnectHandler = function socketConnectHandler(socket) {
 
-    // connection confirmation
     console.log("Socket client connected from " + socket.client.conn.remoteAddress);
-    socket.emit(redisChannel, { status: "connected" });
+    socket.emit("fm:player:status", { status: "connected" });
 
-    // emit socket message on redis pubsub message event
-    redisClient.on("message", function(channel, data) {
-        data = JSON.parse(data);
+};
 
 /**
  * Handle redis events
@@ -67,15 +65,15 @@ var redisEventHandler = function redisEventHandler(channel, data) {
     }
 };
 
+// configure http and socket server on port 8080
 var server = require("http").createServer(serverHandler),
     io = require("socket.io")(server);
 
-// http setup server on port 8080
 server.listen(8080);
 console.log("Socket server started.");
 
-// handle socket connections
-io.on("connection", socketHandler);
+// call socketConnectHandler on socket connection event
+io.on("connection", socketConnectHandler);
 
 // subscribe to redis channel on redis ready event
 redisClient.on("ready", function(){
