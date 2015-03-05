@@ -34,8 +34,12 @@ var serverHandler = function serverHandler (req, res) {
  * @param {Object} socket   socket.io socket
  */
 var socketHandler = function socketHandler(socket) {
+
+    // connection confirmation
+    console.log("Socket client connected from " + socket.client.conn.remoteAddress);
     socket.emit(redisChannel, { status: "connected" });
 
+    // emit socket message on redis pubsub message event
     redisClient.on("message", function(channel, data) {
         data = JSON.parse(data);
 
@@ -52,10 +56,15 @@ var socketHandler = function socketHandler(socket) {
 var server = require("http").createServer(serverHandler),
     io = require("socket.io")(server);
 
+// http setup server on port 8080
 server.listen(8080);
+console.log("Socket server started.");
 
+// handle socket connections
 io.on("connection", socketHandler);
 
+// subscribe to redis channel on redis ready event
 redisClient.on("ready", function(){
     redisClient.subscribe(redisChannel);
+    console.log("Subscribed to redis channel " + redisChannel);
 });
