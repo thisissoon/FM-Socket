@@ -43,18 +43,28 @@ var socketHandler = function socketHandler(socket) {
     redisClient.on("message", function(channel, data) {
         data = JSON.parse(data);
 
-        switch (data.event) {
-            case "pause":
-                socket.emit("fm:player:pause", data);
-            case "resume":
-                socket.emit("fm:player:resume", data);
-            case "play":
-                socket.emit("fm:player:play", data);
-            case "add":
-                socket.emit("fm:player:add", data);
-        }
+/**
+ * Handle redis events
+ * @param {String} channel redis channel name
+ * @param {Object} data    data passed with redis message
+ */
+var redisEventHandler = function redisEventHandler(channel, data) {
+    data = JSON.parse(data);
 
-    });
+    switch (data.event) {
+        case "pause":
+            io.sockets.emit("fm:player:pause", data);
+            break;
+        case "resume":
+            io.sockets.emit("fm:player:resume", data);
+            break;
+        case "play":
+            io.sockets.emit("fm:player:play", data);
+            break;
+        case "add":
+            io.sockets.emit("fm:player:add", data);
+            break;
+    }
 };
 
 var server = require("http").createServer(serverHandler),
@@ -72,3 +82,6 @@ redisClient.on("ready", function(){
     redisClient.subscribe(redisChannel);
     console.log("Subscribed to redis channel " + redisChannel);
 });
+
+// call redisEventHandler on redis message event
+redisClient.on("message", redisEventHandler);
