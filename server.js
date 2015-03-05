@@ -46,8 +46,12 @@ var socketHandler = function socketHandler(socket) {
         switch (data.event) {
             case "pause":
                 socket.emit("fm:player:pause", data);
+            case "resume":
+                socket.emit("fm:player:resume", data);
             case "play":
                 socket.emit("fm:player:play", data);
+            case "add":
+                socket.emit("fm:player:add", data);
         }
 
     });
