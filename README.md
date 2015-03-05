@@ -1,6 +1,6 @@
 # ThisissoonFM Socket Server
 
-The ThisissoonFM socket server intefraces redis pub/sub events with clients via websockets.
+The ThisissoonFM socket server interfaces redis pub/sub events with web clients via sockets.
 
 ## Developing ##
 
@@ -21,11 +21,11 @@ https://docs.docker.com/installation/#installation
 
 Once you have docker running the first thing to do is build the docker image. In future we may host the latest image build on docker hub or similar.
 
-    $ docker build -t thisissoon/fm-socket .
+    $ docker build -t soon/fm-socket .
 
 #### Running the Application
 
-    $ docker run --rm -it thisissoon/fm-socket
+    $ docker run --rm -it soon/fm-socket
 
 #### Running in Development
 
