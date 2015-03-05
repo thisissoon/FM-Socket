@@ -2,6 +2,17 @@
 
 The ThisissoonFM socket server interfaces redis pub/sub events with web clients via sockets.
 
+### Messages
+
+The following socket messages are emitted:
+
+ - `fm:player:play`
+ - `fm:player:pause`
+ - `fm:player:resume`
+ - `fm:player:add`
+
+In each case data from the redis message is passed through to the client.
+
 ## Developing ##
 
 Ensure you have the following tools before you start developing this application:
