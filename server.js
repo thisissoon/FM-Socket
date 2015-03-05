@@ -1,3 +1,4 @@
+"use strict";
 /**
  * Socket server for thisissoon.fm
  * @author SOON_
@@ -17,18 +18,18 @@ var fs = require("fs");
  * @param   {Object}   res node response object
  * @method serverHandler
  */
-var serverHandler = function serverHandler (req, res) {
+var serverHandler = function serverHandler(req, res) {
     fs.readFile(__dirname + "/client-example.html",
-                function (err, data) {
-        if (err) {
-            res.writeHead(500);
-            return res.end("Error loading client-example.html");
-        }
+        function (err, data) {
+            if (err) {
+                res.writeHead(500);
+                return res.end("Error loading client-example.html");
+            }
 
-        res.writeHead(200);
-        res.end(data);
-    });
-}
+            res.writeHead(200);
+            res.end(data);
+        });
+};
 
 /**
  * Log socket connection and emit status event to connected socket
@@ -83,7 +84,7 @@ logger.info("Socket server started.");
 io.on("connection", socketConnectHandler);
 
 // subscribe to redis channel on redis ready event
-redisClient.on("ready", function(){
+redisClient.on("ready", function () {
     redisClient.subscribe(redisChannel);
     logger.info("Subscribed to redis channel " + redisChannel);
 });
