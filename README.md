@@ -38,6 +38,11 @@ Once you have docker running the first thing to do is build the docker image. In
 
     $ docker run --rm -it soon/fm-socket
 
+The following configuration can be set via Environment Varibales:
+
+- `SOCKET_PORT` Server port
+- `SOCKET_LOG_LEVEL` Logging level - defaults to `info`, setting to `verbose` will log all emitted events
+
 #### Running in Development
 
 To run the application in development, we're using [fig](http://www.fig.sh/).

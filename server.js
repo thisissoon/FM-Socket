@@ -6,11 +6,23 @@
  */
 
 var redis = require("redis"),
-    redisClient = redis.createClient(6379, "redis"),
-    redisChannel = "fm:player:channel",
-    logger = require("winston");
+    fs = require("fs"),
+    url = require("url"),
+    winston = require("winston");
 
-var fs = require("fs");
+var env = {
+        redisURI: process.env.REDIS_URI || "redis://redis:6379",
+        socketPort: process.env.SOCKET_PORT || "8080",
+        socketLogLevel: process.env.SOCKET_LOG_LEVEL || "info"
+    },
+    redisClient = redis.createClient(url.parse(env.redisURI).port, url.parse(env.redisURI).hostname),
+    redisChannel = "fm:player:channel";
+
+var logger = new (winston.Logger)({
+    transports: [
+        new (winston.transports.Console)({ level: env.socketLogLevel }),
+    ]
+});
 
 /**
  * Serve example socket client
@@ -77,7 +89,7 @@ var redisEventHandler = function redisEventHandler(channel, data) {
 var server = require("http").createServer(serverHandler),
     io = require("socket.io")(server);
 
-server.listen(8080);
+server.listen(env.socketPort);
 logger.info("Socket server started.");
 
 // call socketConnectHandler on socket connection event
