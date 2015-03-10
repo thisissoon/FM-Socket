@@ -76,6 +76,10 @@ var redisEventHandler = function redisEventHandler(channel, data) {
             logger.verbose("emmiting play event");
             io.sockets.emit("fm:player:play", data);
             break;
+        case "end":
+            logger.verbose("emmiting end event");
+            io.sockets.emit("fm:player:end", data);
+            break;
         case "add":
             logger.verbose("emmiting add event");
             io.sockets.emit("fm:player:add", data);
