@@ -90,7 +90,7 @@ var server = require("http").createServer(serverHandler),
     io = require("socket.io")(server);
 
 server.listen(env.socketPort);
-logger.info("Socket server started.");
+logger.info("Socket server started on port " + env.socketPort);
 
 // call socketConnectHandler on socket connection event
 io.on("connection", socketConnectHandler);
@@ -98,7 +98,8 @@ io.on("connection", socketConnectHandler);
 // subscribe to redis channel on redis ready event
 redisClient.on("ready", function () {
     redisClient.subscribe(redisChannel);
-    logger.info("Subscribed to redis channel " + redisChannel);
+    logger.info("Connected to redis at " + env.redisURI);
+    logger.info("Subscribed to " + redisChannel);
 });
 
 // call redisEventHandler on redis message event
