@@ -12,11 +12,11 @@ var redis = require("redis"),
 
 var env = {
         redisURI: process.env.REDIS_URI || "redis://redis:6379",
+        redisChannel: process.env.REDIS_CHANNEL || "fm:events",
         socketPort: process.env.SOCKET_PORT || "8080",
         socketLogLevel: process.env.SOCKET_LOG_LEVEL || "info"
     },
-    redisClient = redis.createClient(url.parse(env.redisURI).port, url.parse(env.redisURI).hostname),
-    redisChannel = "fm:player:channel";
+    redisClient = redis.createClient(url.parse(env.redisURI).port, url.parse(env.redisURI).hostname);
 
 var logger = new (winston.Logger)({
     transports: [
@@ -97,9 +97,9 @@ io.on("connection", socketConnectHandler);
 
 // subscribe to redis channel on redis ready event
 redisClient.on("ready", function () {
-    redisClient.subscribe(redisChannel);
+    redisClient.subscribe(env.redisChannel);
     logger.info("Connected to redis at " + env.redisURI);
-    logger.info("Subscribed to " + redisChannel);
+    logger.info("Subscribed to " + env.redisChannel);
 });
 
 // call redisEventHandler on redis message event

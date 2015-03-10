@@ -43,6 +43,7 @@ The following configuration can be set via Environment Varibales:
 - `SOCKET_PORT` Server port
 - `SOCKET_LOG_LEVEL` Logging level - defaults to `info`, setting to `verbose` will log all emitted events
 - `REDIS_URI` Set the redis server to listen to - defaults to `redis://redis:6379`
+- `REDIS_CHANNEL` Set the redis channel to listen to - defaults to `fm:events`
 
 #### Running in Development
 
