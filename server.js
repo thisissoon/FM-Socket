@@ -8,7 +8,8 @@
 var redis = require("redis"),
     fs = require("fs"),
     url = require("url"),
-    winston = require("winston");
+    winston = require("winston"),
+    changeCase = require("change-case");
 
 var env = {
         redisURI: process.env.REDIS_URI || "redis://redis:6379",
@@ -61,32 +62,16 @@ var socketConnectHandler = function socketConnectHandler(socket) {
  * @param {Object} data    data passed with redis message
  */
 var redisEventHandler = function redisEventHandler(channel, data) {
+
     data = JSON.parse(data);
 
-    switch (data.event) {
-        case "pause":
-            logger.verbose("emmiting pause event");
-            io.sockets.emit("fm:player:pause", data);
-            break;
-        case "resume":
-            logger.verbose("emmiting resume event");
-            io.sockets.emit("fm:player:resume", data);
-            break;
-        case "play":
-            logger.verbose("emmiting play event");
-            io.sockets.emit("fm:player:play", data);
-            break;
-        case "end":
-            logger.verbose("emmiting end event");
-            io.sockets.emit("fm:player:end", data);
-            break;
-        case "add":
-            logger.verbose("emmiting add event");
-            io.sockets.emit("fm:player:add", data);
-            break;
-        default:
-            logger.warn("unrecognised redis event");
-    }
+    // camelCase event names and prefix with "fm:player:"
+    var redisEventName = changeCase.camelCase(data.event),
+        socketEventName = "fm:player:" + redisEventName;
+
+    logger.verbose("emmiting " + socketEventName + " event");
+    io.sockets.emit(socketEventName, data);
+
 };
 
 // configure http and socket server on port 8080
