@@ -6,15 +6,16 @@
 FROM google/nodejs
 
 # Install global dependencies
-RUN npm install forever -g
+RUN npm install -g forever \
+    grunt-cli
 
 # Install app dependencies
-WORKDIR /fm-socket
-ADD package.json /fm-socket/package.json
+WORKDIR /fm
+ADD package.json /fm/package.json
 RUN npm install
 
 # Bundle app source
-ADD . /fm-socket
+ADD . /fm
 
 EXPOSE  8080
 CMD ["npm", "start"]

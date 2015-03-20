@@ -1,8 +1,10 @@
 socket:
   image: soon/fm-socket:develop
-  command: forever -w server.js
+  command: forever -w fmsocket/index.js
   volumes:
-    - server.js:/fm-socket/server.js
+    - fmsocket:/fm/fmsocket
+    - public:/fm/public
+    - tests:/fm/tests
   ports:
     - "8080:8080"
   links:
@@ -11,6 +13,13 @@ socket:
     - SOCKET_PORT=8080
     - SOCKET_LOG_LEVEL=verbose
     - REDIS_URI=redis://redis:6379
+test:
+  image: soon/fm-socket:develop
+  command: grunt dev
+  links:
+    - socket
+  volumes_from:
+    - socket
 redis:
   image: redis:latest
   expose:
