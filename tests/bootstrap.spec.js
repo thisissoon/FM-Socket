@@ -1,10 +1,9 @@
 "use strict";
 
-var chai = require("chai");
+var chai = require("chai"),
+    sinonChai = require("sinon-chai");
 
 global.expect = chai.expect;
 global.sinon = require("sinon");
 
-var server = require("../fmsocket/server.js");
-
-global.server = server.start();
+chai.use(sinonChai);
