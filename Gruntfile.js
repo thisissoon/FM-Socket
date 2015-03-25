@@ -42,21 +42,20 @@ module.exports = function (grunt){
             }
         },
 
-        mocha_istanbul: {
-            options: {
-                coverage: true,
-                coverageFolder: "<%= config.coverageDir %>",
-                reportFormats: ["cobertura","lcov"],
-                root: "<%= config.appDir %>",
-                timeout: 4000,
-                mochaOptions: {
+        mochacov: {
+            coverage: {
+                options: {
+                    coveralls: true
+                }
+            },
+            test: {
+                options: {
                     reporter: "spec",
-                    growl: true,
                     recursive: true
                 }
             },
-            spec: {
-                src: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>**/*.spec.js"]
+            options: {
+                files: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>**/*.spec.js"]
             }
         },
 
@@ -82,7 +81,7 @@ module.exports = function (grunt){
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks("grunt-contrib-jshint");
-    grunt.loadNpmTasks("grunt-mocha-istanbul");
+    grunt.loadNpmTasks("grunt-mocha-cov");
 
     grunt.registerTask("dev", [
         "connect:server",
@@ -92,7 +91,12 @@ module.exports = function (grunt){
     grunt.registerTask("test", [
         "clean:test",
         "jshint",
-        "mocha_istanbul"
+        "mochacov:test"
+    ]);
+
+    grunt.registerTask("ci", [
+        "test",
+        "mochacov:coverage"
     ]);
 
     grunt.registerTask("default", ["dev"]);
