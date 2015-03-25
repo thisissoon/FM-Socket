@@ -3,6 +3,7 @@
 
 module.exports = function (grunt){
 
+    var testTarget = grunt.option("target") || "/unit/";
 
     grunt.initConfig({
 
@@ -43,18 +44,19 @@ module.exports = function (grunt){
         },
 
         mochacov: {
-            coverage: {
+            unit: {
                 options: {
-                    coveralls: true
+                    files: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>unit/**/*.spec.js"]
                 }
             },
-            test: {
+            integration: {
                 options: {
-                    reporter: "spec",
-                    recursive: true
+                    files: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>websockets.spec.js"]
                 }
             },
             options: {
+                reporter: "spec",
+                recursive: true,
                 files: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>**/*.spec.js"]
             }
         },
@@ -91,12 +93,17 @@ module.exports = function (grunt){
     grunt.registerTask("test", [
         "clean:test",
         "jshint",
-        "mochacov:test"
+        "mochacov:unit"
+    ]);
+
+    grunt.registerTask("test:integration", [
+        "clean:test",
+        "jshint",
+        "mochacov:integration"
     ]);
 
     grunt.registerTask("ci", [
-        "test",
-        "mochacov:coverage"
+        "test"
     ]);
 
     grunt.registerTask("default", ["dev"]);

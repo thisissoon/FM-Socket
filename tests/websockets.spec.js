@@ -20,6 +20,10 @@ before(function(){
 
 });
 
+after(function(){
+    client.disconnect();
+});
+
 describe("socket: on connect", function (){
 
     it("should emit connection confirmaton", function (done){
