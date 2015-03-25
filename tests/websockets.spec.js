@@ -1,8 +1,9 @@
 "use strict";
+/**
+ * Websocket integration tests
+ */
 
 var io, socketURL, options, client;
-
-var sockets = require("../fmsocket/sockets.js");
 
 before(function(){
 

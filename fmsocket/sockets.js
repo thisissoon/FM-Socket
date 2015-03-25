@@ -17,7 +17,7 @@ module.exports = {
      */
     emitSocketMessage: function emitSocketMessage(channel, data) {
 
-//        data = JSON.parse(data);
+        data = JSON.parse(data);
 
         // camelCase event names and prefix with "fm:player:"
         var redisEventName = changeCase.camelCase(data.event),

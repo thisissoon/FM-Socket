@@ -17,7 +17,7 @@ var client = redis.createClient(
 module.exports = {
 
     /**
-     * Initialise redis handlers
+     * Initialise redis event handlers
      * @method init
      */
     init: function(){
