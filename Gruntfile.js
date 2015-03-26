@@ -44,19 +44,26 @@ module.exports = function (grunt){
         },
 
         mochacov: {
+            coverage: {
+                options: {
+                    coveralls: true
+                }
+            },
             unit: {
                 options: {
+                    reporter: "spec",
+                    recursive: true,
                     files: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>unit/**/*.spec.js"]
                 }
             },
             integration: {
                 options: {
+                    reporter: "spec",
+                    recursive: true,
                     files: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>websockets.spec.js"]
                 }
             },
             options: {
-                reporter: "spec",
-                recursive: true,
                 files: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>**/*.spec.js"]
             }
         },
@@ -103,7 +110,8 @@ module.exports = function (grunt){
     ]);
 
     grunt.registerTask("ci", [
-        "test"
+        "test",
+        "mochacov:coverage"
     ]);
 
     grunt.registerTask("default", ["dev"]);
