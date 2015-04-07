@@ -43,15 +43,10 @@ module.exports = function (grunt){
 
         mocha_istanbul: {
             options: {
-                coverage: true,
                 coverageFolder: "<%= config.coverageDir %>",
                 reportFormats: ["cobertura","lcov"],
                 root: "fmsocket/",
-                mochaOptions: {
-                    reporter: "spec",
-                    growl: true,
-                    recursive: true
-                }
+                mochaOptions: ["--reporter spec", "--recursive"]
             },
             unit: {
                 src: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>unit/*.spec.js"]
@@ -62,7 +57,7 @@ module.exports = function (grunt){
         },
 
         coveralls: {
-            options: {
+            test: {
                 src: "<%= config.coverageDir %>lcov.info",
                 force: true
             }
