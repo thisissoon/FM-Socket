@@ -1,8 +1,10 @@
 socket:
   image: soon/fm-socket:develop
-  command: forever -w server.js
+  command: forever -w fmsocket/index.js
   volumes:
-    - server.js:/fm-socket/server.js
+    - fmsocket:/fm/fmsocket
+    - tests:/fm/tests
+    - coverage:/fm/coverage
   ports:
     - "8080:8080"
   links:

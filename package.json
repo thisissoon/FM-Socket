@@ -2,10 +2,10 @@
   "name": "FM-Sockets",
   "version": "0.0.1",
   "description": "Websocket server for thisissoon.fm",
-  "main": "server.js",
+  "main": "fmsocket/index.js",
   "scripts": {
-    "start": "forever /fm-socket/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "forever fmsocket/index.js",
+    "test": "grunt test"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,28 @@
     "redis": "0.12.1",
     "socket.io": "1.3.5",
     "winston": "0.9.0"
+  },
+  "devDependencies": {
+    "chai": "^2.1.2",
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-connect": "^0.9.0",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-coveralls": "^1.0.0",
+    "grunt-mocha-istanbul": "^2.3.1",
+    "istanbul": "^0.3.13",
+    "mocha": "^2.2.1",
+    "mocha-lcov-reporter": "0.0.2",
+    "sinon": "^1.14.1",
+    "sinon-chai": "^2.7.0",
+    "socket.io-client": "^1.3.5"
+  },
+  "config": {
+    "blanket": {
+      "pattern": [
+        "fmsocket"
+      ]
+    }
   }
 }

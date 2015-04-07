@@ -1,17 +1,21 @@
 # ThisissoonFM Socket Server
 
+[![Build Status](https://img.shields.io/circleci/project/thisissoon/FM-Socket/develop.svg)](https://circleci.com/gh/thisissoon/FM-Socket)
+[![Coverage Status](https://coveralls.io/repos/thisissoon/FM-Socket/badge.svg)](https://coveralls.io/r/thisissoon/FM-Socket)
+
 The ThisissoonFM socket server interfaces redis pub/sub events with web clients via sockets.
 
 ### Messages
 
-The following socket messages are emitted:
+The socket messages use the same names as the redis events emitted from FM-API, camelCased and prefixed with `fm:player:` eg:
 
  - `fm:player:play`
- - `fm:player:pause`
- - `fm:player:resume`
  - `fm:player:add`
+ - `fm:player:volumeChanged`
 
-In each case data from the redis message is passed through to the client.
+For a full list of the events see: [FM-API docs](https://github.com/thisissoon/FM-API#events)
+
+In each case data from the redis message is passed through the socket message to the client.
 
 ## Developing ##
 
@@ -57,3 +61,14 @@ Fig defines all the services that make up the app in fig.yml and runs them toget
 To attach your local code for development, un-comment the relevant application volumes in fig.yml.
 
 Check it out at [http://localdocker:8080](http://localdocker:8080)
+
+### Testing
+Testing uses the mocha framework, with istanbul for coverage reports `./coverage/lcov-report`. Run:
+
+    $ grunt test
+
+#### Running Tests in Development
+
+To run the test suite with auto-reruns on code changes, run:
+
+    $ grunt dev
