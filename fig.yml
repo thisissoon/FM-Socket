@@ -3,8 +3,8 @@ socket:
   command: forever -w fmsocket/index.js
   volumes:
     - fmsocket:/fm/fmsocket
-    - public:/fm/public
     - tests:/fm/tests
+    - coverage:/fm/coverage
   ports:
     - "8080:8080"
   links:

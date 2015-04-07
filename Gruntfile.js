@@ -3,8 +3,6 @@
 
 module.exports = function (grunt){
 
-    var testTarget = grunt.option("target") || "/unit/";
-
     grunt.initConfig({
 
         pkg: grunt.file.readJSON("package.json"),
@@ -43,28 +41,30 @@ module.exports = function (grunt){
             }
         },
 
-        mochacov: {
-            coverage: {
-                options: {
-                    coveralls: true
+        mocha_istanbul: {
+            options: {
+                coverage: true,
+                coverageFolder: "<%= config.coverageDir %>",
+                reportFormats: ["cobertura","lcov"],
+                root: "fmsocket/",
+                mochaOptions: {
+                    reporter: "spec",
+                    growl: true,
+                    recursive: true
                 }
             },
             unit: {
-                options: {
-                    reporter: "spec",
-                    recursive: true,
-                    files: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>unit/**/*.spec.js"]
-                }
+                src: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>unit/*.spec.js"]
             },
             integration: {
-                options: {
-                    reporter: "spec",
-                    recursive: true,
-                    files: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>websockets.spec.js"]
-                }
-            },
+                src: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>integration/*.spec.js"]
+            }
+        },
+
+        coveralls: {
             options: {
-                files: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>**/*.spec.js"]
+                src: "<%= config.coverageDir %>lcov.info",
+                force: true
             }
         },
 
@@ -88,9 +88,10 @@ module.exports = function (grunt){
 
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-watch");
-    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks("grunt-contrib-connect");
     grunt.loadNpmTasks("grunt-contrib-jshint");
-    grunt.loadNpmTasks("grunt-mocha-cov");
+    grunt.loadNpmTasks("grunt-mocha-istanbul");
+    grunt.loadNpmTasks("grunt-coveralls");
 
     grunt.registerTask("dev", [
         "connect:server",
@@ -100,18 +101,18 @@ module.exports = function (grunt){
     grunt.registerTask("test", [
         "clean:test",
         "jshint",
-        "mochacov:unit"
+        "mocha_istanbul:unit"
     ]);
 
     grunt.registerTask("test:integration", [
         "clean:test",
         "jshint",
-        "mochacov:integration"
+        "mocha_istanbul:integration"
     ]);
 
     grunt.registerTask("ci", [
         "test",
-        "mochacov:coverage"
+        "coveralls"
     ]);
 
     grunt.registerTask("default", ["dev"]);
