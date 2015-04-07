@@ -1,5 +1,8 @@
 # ThisissoonFM Socket Server
 
+[![Build Status](https://img.shields.io/circleci/project/thisissoon/FM-Socket/develop.svg)](https://circleci.com/gh/thisissoon/FM-Socket)
+[![Coverage Status](https://coveralls.io/repos/thisissoon/FM-Socket/badge.svg)](https://coveralls.io/r/thisissoon/FM-Socket)
+
 The ThisissoonFM socket server interfaces redis pub/sub events with web clients via sockets.
 
 ### Messages
