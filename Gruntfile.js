@@ -57,7 +57,7 @@ module.exports = function (grunt){
                 src: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>unit/*.spec.js"]
             },
             integration: {
-                src: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>integration/*.spec.js"]
+                src: ["<%= config.testDir %>bootstrap.spec.js", "<%= config.testDir %>websockets.spec.js"]
             }
         },
 

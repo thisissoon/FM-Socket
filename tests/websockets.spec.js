@@ -9,7 +9,7 @@ before(function(){
 
     io = require("socket.io-client");
 
-    socketURL = "http://socket:8080";
+    socketURL = "http://localhost:8080";
 
     options = {
         transports: ["websocket"],

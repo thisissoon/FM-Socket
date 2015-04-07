@@ -61,3 +61,14 @@ Fig defines all the services that make up the app in fig.yml and runs them toget
 To attach your local code for development, un-comment the relevant application volumes in fig.yml.
 
 Check it out at [http://localdocker:8080](http://localdocker:8080)
+
+### Testing
+Testing uses the mocha framework, with istanbul for coverage reports `./coverage/lcov-report`. Run:
+
+    $ grunt test
+
+#### Running Tests in Development
+
+To run the test suite with auto-reruns on code changes, run:
+
+    $ grunt dev
