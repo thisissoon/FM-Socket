@@ -7,14 +7,15 @@ The ThisissoonFM socket server interfaces redis pub/sub events with web clients 
 
 ### Messages
 
-The following socket messages are emitted:
+The socket messages use the same names as the redis events emitted from FM-API, camelCased and prefixed with `fm:player:` eg:
 
  - `fm:player:play`
- - `fm:player:pause`
- - `fm:player:resume`
  - `fm:player:add`
+ - `fm:player:volumeChanged`
 
-In each case data from the redis message is passed through to the client.
+For a full list of the events see: [FM-API docs](https://github.com/thisissoon/FM-API#events)
+
+In each case data from the redis message is passed through the socket message to the client.
 
 ## Developing ##
 
