@@ -25,6 +25,7 @@ data:
             proxy_set_header    X-Forwarded-for $remote_addr;
         }
     }
+---
 # Web Frontend Service
 apiVersion: v1
 kind: Service

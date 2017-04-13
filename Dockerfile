@@ -3,7 +3,7 @@
 # Builds a docker image to run the node socket server for thisissoon.fm
 #
 
-FROM google/nodejs
+FROM google/nodejs:0.10.33
 
 # Install global dependencies
 RUN npm install -g forever \
