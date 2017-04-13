@@ -8,12 +8,21 @@ machine:
   services:
     - docker
   environment:
-    REPO: soon/fm-socket
-    TAG: $(sed 's/master/latest/;s/\//\-/' <<<$CIRCLE_BRANCH)
+    REPO: gcr.io/soon-fm-production/websocket
+    TAG: $CIRCLE_SHA1
+    GCLOUD_PROJECT_NAME: soon-fm-production
+    GCLOUD_COMPUTE_ZONE: europe-west1-c
 
 # Build the Docker Image - Tagged by branch - removing feature/
 
 dependencies:
+  pre:
+    - echo $GCLOUD_SERVICE_AUTH | base64 --decode -i > ${HOME}/account-auth.json
+    - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
+    - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update kubectl
+    - sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
+    - sudo /opt/google-cloud-sdk/bin/gcloud config set project ${GCLOUD_PROJECT_NAME}
+    - sudo /opt/google-cloud-sdk/bin/gcloud config set compute/zone ${GCLOUD_COMPUTE_ZONE}
   override:
     - docker build -t $REPO:$TAG .
 
@@ -22,3 +31,16 @@ dependencies:
 test:
   override:
     - docker run -it --name test --net=host --volume="`pwd`/.git:/fm/.git" -e CIRCLE_BRANCH=$CIRCLE_BRANCH -e COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN $REPO:$TAG grunt ci
+
+deployment:
+  prod:
+    branch: master
+    commands:
+      - docker tag $REPO:$TAG $REPO:latest
+      - sudo /opt/google-cloud-sdk/bin/gcloud --quiet container clusters get-credentials production
+      - sudo /opt/google-cloud-sdk/bin/gcloud --quiet config set container/cluster production
+      - sudo /opt/google-cloud-sdk/bin/gcloud docker -- push $REPO:$TAG
+      - sudo /opt/google-cloud-sdk/bin/gcloud docker -- push $REPO:latest
+      - sudo chown -R $USER /home/ubuntu/.config
+      - sudo chown -R $USER /home/ubuntu/.kube
+      - cat k8s.yml | sed "s#\$TAG#${TAG}#g" | kubectl apply -f -

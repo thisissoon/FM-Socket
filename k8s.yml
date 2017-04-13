@@ -1,0 +1,92 @@
+#
+# Kubernetes Deployment
+#
+
+# Config
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: websocket-config
+  labels:
+    app: websocket
+    tier: frontend
+    type: config
+data:
+  websocket.conf: |
+    server {
+        listen 80;
+        location / {
+            proxy_pass          http://localhost:8080;
+            proxy_http_version  1.1;
+            proxy_set_header    Upgrade         $http_upgrade;
+            proxy_set_header    Connection      "upgrade";
+            proxy_set_header    Host            $host;
+            proxy_set_header    X-Real-IP       $remote_addr;
+            proxy_set_header    X-Forwarded-for $remote_addr;
+        }
+    }
+# Web Frontend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: websocket
+  labels:
+    app: websocket
+    tier: frontend
+    type: service
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+  selector:
+    app: websocket
+    tier: frontend
+    type: deployment
+---
+# Web Frontend Deployment
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: websocket
+spec:
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: websocket
+        tier: frontend
+        type: deployment
+    spec:
+      # Containers
+      containers:
+      # Volumes
+      volumes:
+      - name: websocket-config-volume
+        configMap:
+          name: websocket-config
+      # Containers
+      containers:
+      # Nginx Container
+      - name: nginx
+        image: gcr.io/soon-fm-production/nginx:1.10.3
+        resources:
+          requests:
+            memory: "10Mi"
+        volumeMounts:
+        - name: websocket-config-volume
+          mountPath: /etc/nginx/conf.d
+        ports:
+        - containerPort: 80
+      # Web Frontend Application
+      - name: websocket
+        image: gcr.io/soon-fm-production/websocket:$TAG
+        resources:
+          requests:
+            memory: "60Mi"
+        env:
+        - name: SOCKET_LOG_LEVEL
+          value: "verbose"
+        - name: REDIS_URI
+          value: "redis://redis:6379"
+        - name: REDIS_CHANNEL
+          value: "fm:events"
