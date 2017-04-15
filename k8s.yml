@@ -16,8 +16,6 @@ data:
     server {
         listen 80;
         location / {
-            rewrite ^/ws(.*)$ /$1 break;
-            rewrite ^/ws/(.*)$ $1 break;
             proxy_pass          http://localhost:8080;
             proxy_http_version  1.1;
             proxy_set_header    Upgrade         $http_upgrade;
