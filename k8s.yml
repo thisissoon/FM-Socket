@@ -37,8 +37,9 @@ metadata:
     type: service
 spec:
   type: NodePort
+  sessionAffinity: ClientIP
   ports:
-  - port: 80
+  - port: 8080
     protocol: TCP
   selector:
     app: websocket
@@ -68,23 +69,14 @@ spec:
           name: websocket-config
       # Containers
       containers:
-      # Nginx Container
-      - name: nginx
-        image: gcr.io/soon-fm-production/nginx:1.10.3
-        resources:
-          requests:
-            memory: "10Mi"
-        volumeMounts:
-        - name: websocket-config-volume
-          mountPath: /etc/nginx/conf.d
-        ports:
-        - containerPort: 80
       # Web Frontend Application
       - name: websocket
         image: gcr.io/soon-fm-production/websocket:$TAG
         resources:
           requests:
             memory: "60Mi"
+        ports:
+        - containerPort: 8080
         env:
         - name: SOCKET_LOG_LEVEL
           value: "verbose"
