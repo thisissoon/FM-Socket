@@ -52,7 +52,7 @@ kind: Deployment
 metadata:
   name: websocket
 spec:
-  replicas: 4
+  replicas: 1
   template:
     metadata:
       labels:
